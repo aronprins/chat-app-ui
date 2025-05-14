@@ -9,15 +9,6 @@ Developed by [Aron Prins](https://github.com/aronprins) of Aron & Sharon.
 
 ![AI Chat App Preview](https://github.com/user-attachments/assets/fc191791-d4e6-406c-a2c8-336980bf8f04)
 
-# Chat App UI
-
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
-
-A modern, responsive Chat App UI that allows users to create custom chatbots, manage conversations with multiple AI models, and enhance interactions with file uploads.
-
-Developed by [Aron Prins](https://github.com/aronprins) of Aron & Sharon.
-
 ## ✨ Features
 
 - **Multiple AI Models**: Switch between different AI models (Claude, GPT-4, etc.) for each conversation
