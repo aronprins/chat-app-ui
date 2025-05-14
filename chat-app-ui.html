@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Application</title>
+    <link rel="stylesheet" href="chat-app.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 12h-6.5a2 2 0 1 0 0 4H12"/><path d="M12 16v4"/><path d="M12 12v-8"/></svg>
+                    AI Chat App
+                </div>
+            </div>
+            <button class="new-chat-btn" id="new-chat-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                New Chat
+            </button>
+            <div class="search-bar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" placeholder="Search conversations..." id="search-input">
+            </div>
+            <div class="chat-list" id="chat-list">
+                <!-- Chat list will be dynamically populated -->
+            </div>
+            <div class="sidebar-footer">
+                <div class="user-avatar">U</div>
+                <div class="user-info">
+                    <div class="user-name">User Name</div>
+                    <div class="user-email">user@example.com</div>
+                </div>
+                <button class="settings-btn" id="settings-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="chat-header">
+                <div class="chat-info">
+                    <button class="menu-toggle" id="menu-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <div class="bot-selector">
+                        <div class="bot-selector-toggle" id="bot-selector-toggle">
+                            <div class="bot-avatar" id="current-bot-avatar">AI</div>
+                            <span id="current-bot-name">Default AI</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                        <div class="bot-selector-dropdown" id="bot-selector-dropdown">
+                            <div class="bot-selector-header">
+                                <div class="bot-selector-title">Select Chatbot</div>
+                                <button class="create-bot-btn" id="create-bot-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    New Bot
+                                </button>
+                            </div>
+                            <div class="bot-list" id="bot-list">
+                                <!-- Bot list will be populated dynamically -->
+                                <div class="bot-item active" data-bot-id="default">
+                                    <div class="bot-item-avatar">AI</div>
+                                    <div class="bot-item-info">
+                                        <div class="bot-item-name">Default AI</div>
+                                        <div class="bot-item-desc">General purpose assistant</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bot-actions">
+                    <button class="bot-action-btn" id="bot-files-btn" title="Bot Files">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <span class="file-count" id="file-count">0</span>
+                    </button>
+                    <div class="model-selector">
+                        <select id="model-select">
+                            <option value="claude-3-opus">Claude 3 Opus</option>
+                            <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                            <option value="claude-3-7-sonnet" selected>Claude 3.7 Sonnet</option>
+                            <option value="claude-3-5-haiku">Claude 3.5 Haiku</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chat-messages">
+                <!-- Empty chat state will be shown initially -->
+                <div class="empty-chat" id="empty-chat">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 12h-6.5a2 2 0 1 0 0 4H12"/><path d="M12 16v4"/><path d="M12 12v-8"/></svg>
+                    <h2>Start a new conversation</h2>
+                    <p>Choose a model and start chatting. Your conversations will be saved automatically.</p>
+                    <button class="new-chat-btn" onclick="startNewChat()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        New Chat
+                    </button>
+                </div>
+                <!-- Messages will be dynamically added here -->
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea class="chat-input" id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+                    <div class="input-buttons">
+                        <button class="attach-btn" id="upload-file-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+                        </button>
+                        <button class="send-btn" id="send-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bot Files Panel -->
+            <div class="bot-files-panel" id="bot-files-panel">
+                <div class="bot-files-header">
+                    <div class="bot-files-title">Bot Files</div>
+                    <button class="bot-files-close" id="bot-files-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="bot-files-content" id="bot-files-content">
+                    <!-- Files will be populated dynamically -->
+                    <div class="empty-files" id="empty-files">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        <p>No files uploaded yet</p>
+                        <button class="btn btn-primary upload-bot-file-btn" id="upload-bot-file-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            Upload Files
+                        </button>
+                    </div>
+                </div>
+                <div class="bot-files-actions">
+                    <button class="upload-bot-file-btn" id="add-bot-file-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Upload Files
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- File Upload Modal -->
+        <div class="file-upload-modal" id="file-upload-modal">
+            <div class="file-upload-container">
+                <div class="file-upload-header">
+                    <h3>Upload Files</h3>
+                    <button class="file-upload-close" id="file-upload-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="file-upload-body">
+                    <label for="file-upload-input" class="file-upload-area" id="file-upload-area">
+                        <div class="file-upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        </div>
+                        <p>Drag and drop files here, or click to browse</p>
+                        <span>PDF, TXT, CSV, DOCX, XLSX, JPG, PNG (max 10MB)</span>
+                    </label>
+                    <input type="file" id="file-upload-input" class="file-upload-input" multiple>
+                    
+                    <div class="file-list" id="upload-file-list" style="display: none;">
+                        <div class="file-list-header">Selected Files</div>
+                        <div id="upload-file-items">
+                            <!-- Uploaded files will appear here -->
+                        </div>
+                    </div>
+                    
+                    <div class="file-upload-actions">
+                        <button class="btn btn-secondary" id="file-upload-cancel">Cancel</button>
+                        <button class="btn btn-primary" id="file-upload-submit">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Create Chatbot Modal -->
+        <div class="create-bot-modal" id="create-bot-modal">
+            <div class="create-bot-container">
+                <div class="create-bot-header">
+                    <h3>Create New Chatbot</h3>
+                    <button class="create-bot-close" id="create-bot-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                <div class="create-bot-body">
+                    <div class="form-group">
+                        <label for="bot-name">Bot Name</label>
+                        <input type="text" id="bot-name" class="form-control" placeholder="E.g. Research Assistant, Code Helper, etc.">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Avatar</label>
+                        <div class="avatar-selector" id="avatar-selector">
+                            <div class="avatar-option selected" data-avatar="R">R</div>
+                            <div class="avatar-option" data-avatar="C">C</div>
+                            <div class="avatar-option" data-avatar="D">D</div>
+                            <div class="avatar-option" data-avatar="S">S</div>
+                            <div class="avatar-option" data-avatar="T">T</div>
+                            <div class="avatar-option" data-avatar="M">M</div>
+                            <div class="avatar-option custom" data-avatar="🤖">🤖</div>
+                            <div class="avatar-option custom" data-avatar="📚">📚</div>
+                            <div class="avatar-option custom" data-avatar="💻">💻</div>
+                            <div class="avatar-option custom" data-avatar="🔍">🔍</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bot-description">Description</label>
+                        <input type="text" id="bot-description" class="form-control" placeholder="Short description of what this bot does">
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="bot-instruction-label">
+                            <label for="bot-instructions">Instructions</label>
+                            <span>0/2000</span>
+                        </div>
+                        <textarea id="bot-instructions" class="form-control bot-instructions" placeholder="Provide detailed instructions for your chatbot. What should it help with? How should it respond? Any specific knowledge or style it should have?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Default Model</label>
+                        <select id="bot-default-model" class="form-control">
+                            <option value="claude-3-opus">Claude 3 Opus</option>
+                            <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                            <option value="claude-3-7-sonnet" selected>Claude 3.7 Sonnet</option>
+                            <option value="claude-3-5-haiku">Claude 3.5 Haiku</option>
+                            <option value="gpt-4o">GPT-4o</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="create-bot-actions">
+                        <button class="btn btn-secondary" id="create-bot-cancel">Cancel</button>
+                        <button class="btn btn-primary" id="create-bot-submit">Create Chatbot</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Modal -->
+        <div class="modal-backdrop" id="settings-modal-backdrop">
+            <div class="settings-modal">
+                <div class="settings-sidebar">
+                    <div class="settings-tabs">
+                        <div class="settings-tab active" data-tab="general">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                            General
+                        </div>
+                        <div class="settings-tab" data-tab="appearance">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"></path><circle cx="12" cy="12" r="8"></circle><path d="M12 8a2 2 0 0 0 4 0H12z"></path><path d="M12 16a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"></path></svg>
+                            Appearance
+                        </div>
+                        <div class="settings-tab" data-tab="models">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                            Models
+                        </div>
+                        <div class="settings-tab" data-tab="privacy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            Privacy
+                        </div>
+                        <div class="settings-tab" data-tab="advanced">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            Advanced
+                        </div>
+                        <div class="settings-tab" data-tab="about">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            About
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-header">
+                        <h2 id="settings-title">General Settings</h2>
+                        <button class="settings-close" id="settings-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                    
+                    <!-- General Settings Panel -->
+                    <div class="settings-panel active" id="general-panel">
+                        <div class="settings-section">
+                            <h3>User Information</h3>
+                            <div class="form-group">
+                                <label for="display-name">Display Name</label>
+                                <input type="text" id="display-name" class="form-control" value="User Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" class="form-control" value="user@example.com">
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Notifications</h3>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="notify-new-messages" checked>
+                                <label for="notify-new-messages">Notify for new messages</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="notify-mentions">
+                                <label for="notify-mentions">Notify when mentioned</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="sound-notifications" checked>
+                                <label for="sound-notifications">Sound notifications</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Appearance Settings Panel -->
+                    <div class="settings-panel" id="appearance-panel">
+                        <div class="settings-section">
+                            <h3>Theme</h3>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="dark-mode">
+                                <label for="dark-mode">Dark Mode</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Accent Color</label>
+                                <div class="color-picker">
+                                    <div class="color-option active" style="background-color: #6366f1;" data-color="#6366f1"></div>
+                                    <div class="color-option" style="background-color: #10b981;" data-color="#10b981"></div>
+                                    <div class="color-option" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                                    <div class="color-option" style="background-color: #f59e0b;" data-color="#f59e0b"></div>
+                                    <div class="color-option" style="background-color: #8b5cf6;" data-color="#8b5cf6"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Chat Display</h3>
+                            <div class="form-group">
+                                <label for="font-size">Font Size</label>
+                                <select id="font-size" class="form-control">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                </select>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="compact-mode">
+                                <label for="compact-mode">Compact Mode</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Models Settings Panel -->
+                    <div class="settings-panel" id="models-panel">
+                        <div class="settings-section">
+                            <h3>Default Model</h3>
+                            <div class="form-group">
+                                <select id="default-model" class="form-control">
+                                    <option value="claude-3-opus">Claude 3 Opus</option>
+                                    <option value="claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                                    <option value="claude-3-7-sonnet" selected>Claude 3.7 Sonnet</option>
+                                    <option value="claude-3-5-haiku">Claude 3.5 Haiku</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>API Keys</h3>
+                            <div class="form-group">
+                                <label for="anthropic-key">Anthropic API Key</label>
+                                <input type="password" id="anthropic-key" class="form-control" placeholder="sk-ant-...">
+                            </div>
+                            <div class="form-group">
+                                <label for="openai-key">OpenAI API Key</label>
+                                <input type="password" id="openai-key" class="form-control" placeholder="sk-...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Privacy Settings Panel -->
+                    <div class="settings-panel" id="privacy-panel">
+                        <div class="settings-section">
+                            <h3>Data Storage</h3>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="save-conversations" checked>
+                                <label for="save-conversations">Save conversations locally</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="anonymize-data">
+                                <label for="anonymize-data">Anonymize data sent to AI providers</label>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Data Management</h3>
+                            <button class="btn btn-secondary" id="export-data">Export All Data</button>
+                            <button class="btn btn-secondary" id="clear-data" style="margin-top: 12px;">Clear All Conversations</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Settings Panel -->
+                    <div class="settings-panel" id="advanced-panel">
+                        <div class="settings-section">
+                            <h3>Advanced Options</h3>
+                            <div class="form-group">
+                                <label for="max-tokens">Maximum Response Length (tokens)</label>
+                                <input type="number" id="max-tokens" class="form-control" value="4000">
+                            </div>
+                            <div class="form-group">
+                                <label for="temperature">Temperature</label>
+                                <input type="range" id="temperature" class="form-control" min="0" max="1" step="0.1" value="0.7">
+                                <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                                    <span>Precise</span>
+                                    <span>Creative</span>
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="streaming" checked>
+                                <label for="streaming">Enable streaming responses</label>
+                            </div>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Developer Options</h3>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="debug-mode">
+                                <label for="debug-mode">Debug Mode</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="show-token-count">
+                                <label for="show-token-count">Show token counts</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- About Panel -->
+                    <div class="settings-panel" id="about-panel">
+                        <div class="settings-section">
+                            <h3>About AI Chat App</h3>
+                            <p style="margin-bottom: 16px;">Version 1.0.0</p>
+                            <p style="margin-bottom: 16px;">AI Chat App is a modern, responsive chat application that allows you to have multiple conversations with different AI models.</p>
+                            <p>© 2025 AI Chat App. All rights reserved.</p>
+                        </div>
+                        <div class="settings-section">
+                            <h3>Support</h3>
+                            <p style="margin-bottom: 16px;">For support or feature requests, please contact:</p>
+                            <p><a href="mailto:support@aichatapp.com">support@aichatapp.com</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-btn-group">
+                        <button class="btn btn-secondary" id="cancel-settings">Cancel</button>
+                        <button class="btn btn-primary" id="save-settings">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="chat-app.js"></script>
+</body>
+</html>
